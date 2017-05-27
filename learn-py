@@ -1,0 +1,10 @@
+# -*- coding： utf-8 -*- 
+import os,sys
+print(sys.argv)
+def cdwalker(cdrom,cdcfile):
+	export = ""
+	for root,dirs,files in os.walk("cdrom"):
+	  # export.append("\n %s;%s;%s"%(root,dirs,files))
+		export += "\n %s;%s;%s"%(root,dirs,files)
+	open('cdcfile', 'w').write(''.join(export)) 
+cdwalker('c:/python','mycd.cdc')		
