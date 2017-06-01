@@ -34,3 +34,66 @@ def calc_prod(lst):
 
 f = calc_prod([1, 2, 3, 4])
 print(f())
+#闭包
+def count():
+	fs = []
+	for i in range(1 ,4):
+		def f():
+			return i*i
+		fs.append(f)
+	return fs
+f1,f2,f3 = count()
+
+def count():
+    fs = []
+    for i in range(1, 4):
+        def f(i):
+            return lambda : i*i
+        fs.append(f(i))
+    return fs
+f1, f2, f3 = count()
+print(f1(), f2(), f3())
+
+#python中匿名函数
+p1=list(filter(lambda s : s and len(s.strip()) > 0 , ['test', None, '', 'str', '  ', 'END']))
+print(p1)
+
+#装饰器
+def performance(f):
+    def print_time(*args, **kw):
+        print('call '+f.__name__+'() in '+time.strftime('%Y-%m-%d',time.localtime(time.time())))
+        return f(*args,**kw)
+    return print_time
+
+@performance
+def factorial(n):
+    return reduce(lambda x,y: x*y, range(1, n+1))
+
+print(factorial(10))
+
+#python中带参数decorator
+import time
+
+def performance(unit):
+    def perf_decorator(f):
+        def wrapper(*args, **kw):
+            t1 = time.time()
+            time.sleep(1)
+            r = f(*args, **kw)
+            t2 = time.time()
+            t = (t2 - t1)*1000-1000 if unit =='ms' else (t2 - t1)
+            print('call %s() in %f %s'%(f.__name__, t, unit))
+            return r
+        return wrapper
+    return perf_decorator
+
+@performance('ms')  
+def factorial(n):
+    return reduce(lambda x,y: x*y, range(1, n+1))
+print(factorial(10))
+#偏函数 可改变默认的函数参数
+import functools
+
+sorted_ignore_case = functools.partial(sorted,key=str.lower)
+
+print(sorted_ignore_case(['bob', 'about', 'Zoo', 'Credit']))
